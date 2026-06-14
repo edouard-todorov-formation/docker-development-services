@@ -1,10 +1,18 @@
 # Docker Development Services
 
-Infrastructure Docker de développement pour l'apprentissage, les expérimentations et les projets Full Stack.
+Infrastructure Docker de développement pour l'apprentissage, l'expérimentation et les projets Full Stack.
 
 ## Objectif
 
-Ce dépôt centralise les services techniques utilisés dans l'environnement de développement.
+Ce dépôt centralise les services d'infrastructure Docker utilisés dans l'environnement de développement.
+
+Chaque service est isolé dans son propre dossier et dispose de :
+
+- un docker-compose.yml
+- un fichier .env
+- un fichier .env.example
+- un dossier de données persistant
+- un dossier de sauvegardes
 
 Services actuellement disponibles :
 
@@ -193,13 +201,20 @@ http://localhost:8080
 
 Conteneurs :
 
-* postgres
+* postgres-server
 * pgadmin
 
-Port PostgreSQL :
+Ports :
+
+| Service | Port |
+|----------|----------|
+| PostgreSQL | 5432 |
+| pgAdmin | 8081 |
+
+Accès :
 
 ```text
-5432
+http://localhost:8081
 ```
 
 ---
@@ -208,12 +223,18 @@ Port PostgreSQL :
 
 Conteneur :
 
-* redis
+* redis-server
 
-Port :
+Ports :
+
+| Service | Port |
+|----------|----------|
+| Redis | 6379 |
+
+Accès :
 
 ```text
-6379
+redis://localhost:6379
 ```
 
 ---
@@ -222,13 +243,20 @@ Port :
 
 Conteneurs :
 
-* mongodb
+* mongodb-server
 * mongo-express
 
-Port MongoDB :
+Ports :
+
+| Service | Port |
+|----------|----------|
+| MongoDB | 27017 |
+| Mongo Express | 8082 |
+
+Accès :
 
 ```text
-27017
+http://localhost:8082
 ```
 
 ---
@@ -305,22 +333,14 @@ Principes :
 
 ---
 
-## Historique
-
-Infrastructure validée :
-
-* Git
-* GitHub SSH
-* Docker Desktop
-* MySQL
-* PostgreSQL
-* Redis
-* MongoDB
-* Persistance des données
-* Versionnement Git des stacks Docker
-
----
-
 ## Auteur
 
 Edouard Todorov
+
+Développeur Full Stack
+
+🌐 Portfolio : https://portfolio.tekedo.fr
+
+💼 LinkedIn : [https://linkedin.com/in/edouard-todorov](https://www.linkedin.com/in/edouard-todorov)
+
+🐙 GitHub : https://github.com/edouard-todorov-formation
