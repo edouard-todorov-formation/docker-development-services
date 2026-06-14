@@ -1,0 +1,16 @@
+name: bdd-redis
+
+services:
+    redis:
+        image: redis:8
+        container_name: redis-server
+
+        restart: unless-stopped
+
+        ports:
+            - "6379:6379"
+
+        volumes:
+            - ./data-redis:/data
+
+        command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
