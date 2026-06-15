@@ -21,13 +21,13 @@ Docker-based development infrastructure for learning, experimentation, and Full 
 
 Ce dépôt centralise les services d'infrastructure Docker utilisés dans l'environnement de développement.
 
-Chaque service est isolé dans son propre dossier et dispose de :
+Chaque service est isolé dans son propre dossier,  dispose d'un docker-compose.yml et peut inclure :
 
-- un docker-compose.yml
 - un fichier .env
 - un fichier .env.example
 - un dossier de données persistant
 - un dossier de sauvegardes
+- des fichiers de configuration spécifiques selon le service
 
 Services actuellement disponibles :
 
@@ -446,13 +446,13 @@ Docker-based development infrastructure for learning, experimentation, and Full 
 
 This repository centralizes the Docker infrastructure services used in the development environment.
 
-Each service is isolated in its own directory and includes:
+Each service is isolated in its own directory, includes a 'docker-compose.yml' file, and may also contain:
 
-* a `docker-compose.yml` file
-* a `.env` file
-* a `.env.example` file
-* a persistent data directory
-* a backup directory
+a '.env' file
+a '.env.example' file
+a persistent data directory
+a backup directory
+service-specific configuration files
 
 Currently available services:
 
