@@ -36,10 +36,10 @@ Services actuellement disponibles :
 * Redis
 * MongoDB
 * RabbitMQ
+* MinIO
 
 Services prévus :
 
-* MinIO
 * Grafana
 * Elasticsearch
 
@@ -137,6 +137,13 @@ Messaging/
     ├── docker-compose.yml
     ├── backups/
     └── data-rabbitmq/
+
+Storage
+└── MinIO
+     ├── .env.example
+     ├── docker-compose.yml
+     ├── backups/
+     └── data-minio/
 ```
 
 ---
@@ -320,6 +327,27 @@ http://localhost:15672
 
 ---
 
+### MinIO
+
+Conteneur :
+
+* minio-server
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| MinIO API | 9000 |
+| MinIO Console | 9001 |
+
+Accès :
+
+```text
+http://localhost:9001
+```
+
+---
+
 ## Gestion des secrets
 
 Les fichiers suivants ne sont jamais versionnés :
@@ -433,10 +461,10 @@ Currently available services:
 * Redis
 * MongoDB
 * RabbitMQ
+* MinIO
 
 Planned services:
 
-* MinIO
 * Grafana
 * Elasticsearch
 
@@ -534,6 +562,13 @@ Messaging/
     ├── docker-compose.yml
     ├── backups/
     └── data-rabbitmq/
+
+Storage
+└── MinIO
+     ├── .env.example
+     ├── docker-compose.yml
+     ├── backups/
+     └── data-minio/
 ```
 
 ---
@@ -713,6 +748,27 @@ Access:
 
 ```text
 http://localhost:15672
+```
+
+---
+
+### MinIO
+
+Container :
+
+* minio-server
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| MinIO API | 9000 |
+| MinIO Console | 9001 |
+
+Access :
+
+```text
+http://localhost:9001
 ```
 
 ---
