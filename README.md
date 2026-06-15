@@ -2,6 +2,21 @@
 
 Infrastructure Docker de développement pour l'apprentissage, l'expérimentation et les projets Full Stack.
 
+Docker-based development infrastructure for learning, experimentation, and Full Stack projects.
+
+---
+
+## Languages
+
+- [Français](#version-française)
+- [English](#english-version)
+
+---
+
+# Version Française
+
+...
+
 ## Objectif
 
 Ce dépôt centralise les services d'infrastructure Docker utilisés dans l'environnement de développement.
@@ -123,19 +138,23 @@ BDD/
 
 ### Exemple avec MySQL
 
+Ouvrir un terminal PowerShell dans le dossier du dépôt.
+
 Se placer dans le dossier du service :
 
 ```powershell
 cd BDD\MySQL
 ```
 
-Créer le fichier `.env` :
+Créer le fichier `.env` à partir du modèle fourni:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Modifier les paramètres du fichier `.env`.
+Cette commande crée une copie du fichier .env.example et la renomme en .env.
+
+Modifier ensuite les paramètres du fichier .env selon vos besoins.
 
 Démarrer les conteneurs :
 
@@ -162,13 +181,25 @@ docker compose logs -f
 Arrêter les conteneurs :
 
 ```powershell
-docker compose down
+docker compose stop
 ```
 
 Redémarrer les conteneurs :
 
 ```powershell
 docker compose restart
+```
+
+Arrêter et supprimer les conteneurs :
+
+```powershell
+docker compose down
+```
+
+Redémarrer complètement le service :
+
+```powershell
+docker compose up -d
 ```
 
 ---
@@ -337,10 +368,379 @@ Principes :
 
 Edouard Todorov
 
-Développeur Full Stack
+Développeur Full Stack en formation
 
 🌐 Portfolio : https://portfolio.tekedo.fr
 
-💼 LinkedIn : [https://linkedin.com/in/edouard-todorov](https://www.linkedin.com/in/edouard-todorov)
+💼 LinkedIn : https://www.linkedin.com/in/edouard-todorov
 
 🐙 GitHub : https://github.com/edouard-todorov-formation
+
+---
+---
+---
+
+# English Version
+
+...
+
+Docker-based development infrastructure for learning, experimentation, and Full Stack projects.
+
+## Purpose
+
+This repository centralizes the Docker infrastructure services used in the development environment.
+
+Each service is isolated in its own directory and includes:
+
+* a `docker-compose.yml` file
+* a `.env` file
+* a `.env.example` file
+* a persistent data directory
+* a backup directory
+
+Currently available services:
+
+* MySQL
+* PostgreSQL
+* Redis
+* MongoDB
+
+Planned services:
+
+* RabbitMQ
+* MinIO
+* Grafana
+* Elasticsearch
+
+---
+
+## Requirements
+
+* Docker Desktop
+* WSL2 backend recommended
+* Git
+* PowerShell 7 (Windows)
+
+---
+
+## Clone the Repository
+
+```powershell
+git clone git@github.com:edouard-todorov-formation/docker-development-services.git
+```
+
+The repository can be cloned into any directory.
+
+Examples:
+
+```text
+C:\Projects\docker-development-services
+
+D:\Docker\docker-development-services
+
+/home/dev/docker-development-services
+```
+
+---
+
+## Recommended Directory Structure
+
+The reference environment uses the following organization:
+
+```text
+E:\Dev
+├── Projects
+├── Docker
+│   └── Services
+├── AI
+└── Backups
+```
+
+The repository is then located at:
+
+```text
+E:\Dev\Docker\Services
+```
+
+This structure is not mandatory but is recommended to clearly separate:
+
+* development projects
+* Docker services
+* backups
+* AI resources
+
+---
+
+## Current Structure
+
+```text
+BDD/
+├── MongoDB/
+│   ├── .env.example
+│   ├── docker-compose.yml
+│   ├── backups/
+│   └── data-mongodb/
+│
+├── MySQL/
+│   ├── .env.example
+│   ├── docker-compose.yml
+│   ├── backups/
+│   └── data-mysql/
+│
+├── PostgreSQL/
+│   ├── .env.example
+│   ├── docker-compose.yml
+│   ├── backups/
+│   ├── data-postgres/
+│   └── data-pgadmin/
+│
+└── Redis/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── backups/
+    └── data-redis/
+```
+
+---
+
+## Starting a Service
+
+### Example with MySQL
+
+Open a PowerShell terminal from the repository root directory.
+
+Navigate to the service directory:
+
+```powershell
+cd BDD\MySQL
+```
+
+Create the `.env` file from the provided template:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+This command creates a copy of `.env.example` and renames it to `.env`.
+
+Edit the values in the `.env` file according to your needs.
+
+Start the containers:
+
+```powershell
+docker compose up -d
+```
+
+---
+
+## Verification and Management
+
+List running containers:
+
+```powershell
+docker ps
+```
+
+Display logs:
+
+```powershell
+docker compose logs -f
+```
+
+Stop containers:
+
+```powershell
+docker compose stop
+```
+
+Restart containers:
+
+```powershell
+docker compose restart
+```
+
+Stop and remove containers:
+
+```powershell
+docker compose down
+```
+
+Recreate and start the service:
+
+```powershell
+docker compose up -d
+```
+
+---
+
+## Available Services
+
+### MySQL
+
+Containers:
+
+* mysql-server
+* phpmyadmin
+
+Ports:
+
+| Service    | Port |
+| ---------- | ---- |
+| MySQL      | 3306 |
+| phpMyAdmin | 8080 |
+
+Access:
+
+```text
+http://localhost:8080
+```
+
+---
+
+### PostgreSQL
+
+Containers:
+
+* postgres-server
+* pgadmin
+
+Ports:
+
+| Service    | Port |
+| ---------- | ---- |
+| PostgreSQL | 5432 |
+| pgAdmin    | 8081 |
+
+Access:
+
+```text
+http://localhost:8081
+```
+
+---
+
+### Redis
+
+Container:
+
+* redis-server
+
+Ports:
+
+| Service | Port |
+| ------- | ---- |
+| Redis   | 6379 |
+
+Access:
+
+```text
+redis://localhost:6379
+```
+
+---
+
+### MongoDB
+
+Containers:
+
+* mongodb-server
+* mongo-express
+
+Ports:
+
+| Service       | Port  |
+| ------------- | ----- |
+| MongoDB       | 27017 |
+| Mongo Express | 8082  |
+
+Access:
+
+```text
+http://localhost:8082
+```
+
+---
+
+## Secrets Management
+
+The following files are never versioned:
+
+```text
+.env
+```
+
+Real passwords and credentials remain only on the local machine.
+
+The following files are versioned:
+
+```text
+.env.example
+```
+
+---
+
+## Persistent Data
+
+Docker data directories are never pushed to GitHub.
+
+Examples:
+
+```text
+data-mysql/
+data-postgres/
+data-pgadmin/
+data-redis/
+data-mongodb/
+```
+
+These directories are excluded through the `.gitignore` file.
+
+---
+
+## Backups
+
+Each service includes a dedicated:
+
+```text
+backups/
+```
+
+directory intended to store future backup exports.
+
+---
+
+## Conventions
+
+Each service follows the structure below:
+
+```text
+ServiceName/
+├── .env
+├── .env.example
+├── docker-compose.yml
+├── backups/
+└── data-service/
+```
+
+Principles:
+
+* 1 technology = 1 directory
+* 1 `.env` file
+* 1 `.env.example` file
+* 1 `docker-compose.yml` file
+* 1 dedicated data directory
+* 1 dedicated backup directory
+
+---
+
+## Author
+
+Edouard Todorov
+
+Aspiring Full Stack Developer
+
+🌐 Portfolio: https://portfolio.tekedo.fr
+
+💼 LinkedIn: https://www.linkedin.com/in/edouard-todorov
+
+🐙 GitHub: https://github.com/edouard-todorov-formation
