@@ -8,8 +8,8 @@ Docker-based development infrastructure for learning, experimentation, and Full 
 
 ## Languages
 
-- [Français](#version-française)
-- [English](#english-version)
+- [Français](# 🇫🇷 Version Française)
+- [English](# 🇬🇧 English Version)
 
 ---
 
@@ -21,10 +21,10 @@ Docker-based development infrastructure for learning, experimentation, and Full 
 
 Ce dépôt centralise les services d'infrastructure Docker utilisés dans l'environnement de développement.
 
-Chaque service est isolé dans son propre dossier,  dispose d'un docker-compose.yml et peut inclure :
+Chaque service est isolé dans son propre dossier, dispose d'un fichier `docker-compose.yml` et peut inclure :
 
-- un fichier .env
-- un fichier .env.example
+- un fichier `.env`
+- un fichier `.env.example`
 - un dossier de données persistant
 - un dossier de sauvegardes
 - des fichiers de configuration spécifiques selon le service
@@ -37,11 +37,14 @@ Services actuellement disponibles :
 * MongoDB
 * RabbitMQ
 * MinIO
+* Grafana
+* Prometheus
+* Node Exporter
 
 Services prévus :
 
-* Grafana
 * Elasticsearch
+* Nginx Proxy Manager
 
 ---
 
@@ -126,10 +129,10 @@ BDD/
 │   └── data-pgadmin/
 │
 └── Redis/
-     ├── .env.example
-     ├── docker-compose.yml
-     ├── backups/
-     └── data-redis/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── backups/
+    └── data-redis/
 
 Messaging/
 └── RabbitMQ/
@@ -138,12 +141,29 @@ Messaging/
     ├── backups/
     └── data-rabbitmq/
 
-Storage
-└── MinIO
-     ├── .env.example
-     ├── docker-compose.yml
-     ├── backups/
-     └── data-minio/
+Storage/
+└── MinIO/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── backups/
+    └── data-minio/
+
+Monitoring/
+├── Grafana/
+│   ├── .env.example
+│   ├── docker-compose.yml
+│   ├── backups/
+│   └── data-grafana/
+│
+├── Prometheus/
+│   ├── docker-compose.yml
+│   ├── prometheus.yml
+│   ├── backups/
+│   └── data-prometheus/
+│
+└── NodeExporter/
+    ├── docker-compose.yml
+    └── backups/
 ```
 
 ---
@@ -348,6 +368,145 @@ http://localhost:9001
 
 ---
 
+### Grafana
+
+Conteneur :
+
+* grafana-server
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| Grafana | 3000 |
+
+Accès :
+
+```text
+http://localhost:3000
+```
+
+---
+
+### Prometheus
+
+Conteneur :
+
+* prometheus-server
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| Prometheus | 9090 |
+
+Accès :
+
+```text
+http://localhost:9090
+```
+
+---
+
+### Node Exporter
+
+Conteneur :
+
+* node-exporter
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| Node Exporter | 9100 |
+
+Accès :
+
+```text
+http://localhost:9100/metrics
+```
+Endpoint Prometheus exposant les métriques système.
+
+---
+
+## Configuration du monitoring
+
+Après le démarrage des services Monitoring, quelques actions sont nécessaires pour finaliser la configuration.
+
+### Ajouter Prometheus comme source de données Grafana
+
+1. Ouvrir Grafana :
+
+```text
+http://localhost:3000
+```
+
+2. Se connecter avec les identifiants définis dans le fichier .env.
+
+3. Aller dans :
+
+```text
+Connections
+→ Data Sources
+→ Add data source
+```
+
+4. Sélectionner :
+
+```text
+Prometheus
+```
+
+5. Utiliser l'URL suivante :
+
+```text
+http://host.docker.internal:9090
+```
+
+Note :
+
+- `http://localhost:9090` depuis votre navigateur web
+- `http://host.docker.internal:9090` depuis un conteneur Docker
+
+6. Cliquer sur :
+
+```text
+Save & Test
+```
+
+### Importer un dashboard système
+
+1. Dans Grafana :
+
+```text
+Dashboards
+```
+
+→ Import
+
+2. Importer le dashboard :
+
+```text
+1860
+```
+
+3. Sélectionner la source de données Prometheus.
+Cliquer sur :
+```text
+Import
+```
+
+Ce dashboard permet de visualiser :
+
+l'utilisation CPU ;
+l'utilisation mémoire ;
+l'utilisation disque ;
+le trafic réseau ;
+la charge système ;
+le temps de fonctionnement de la machine.
+
+---
+
 ## Gestion des secrets
 
 Les fichiers suivants ne sont jamais versionnés :
@@ -378,6 +537,10 @@ data-postgres/
 data-pgadmin/
 data-redis/
 data-mongodb/
+data-rabbitmq/
+data-minio/
+data-grafana/
+data-prometheus/
 ```
 
 Ces dossiers sont exclus via le fichier `.gitignore`.
@@ -402,21 +565,22 @@ Chaque service suit la structure suivante :
 
 ```text
 NomDuService/
-├── .env
-├── .env.example
 ├── docker-compose.yml
 ├── backups/
-└── data-service/
+├── data-service/
+├── .env (optionnel)
+├── .env.example (optionnel)
+└── fichiers de configuration spécifiques (optionnels)
 ```
 
 Principes :
 
-* 1 technologie = 1 dossier
-* 1 fichier `.env`
-* 1 fichier `.env.example`
+* 1 service par dossier dédié
 * 1 fichier `docker-compose.yml`
-* 1 dossier de données dédié
-* 1 dossier de sauvegardes dédié
+* 1 dossier de données dédié lorsque nécessaire
+* 1 dossier de sauvegardes dédié lorsque nécessaire
+* 1 fichier `.env` lorsque le service utilise des variables d'environnement
+* 1 fichier `.env.example` lorsque le service utilise des variables d'environnement
 
 ---
 
@@ -446,13 +610,13 @@ Docker-based development infrastructure for learning, experimentation, and Full 
 
 This repository centralizes the Docker infrastructure services used in the development environment.
 
-Each service is isolated in its own directory, includes a 'docker-compose.yml' file, and may also contain:
+Each service is isolated in its own directory, includes a `docker-compose.yml` file, and may also contain:
 
-a '.env' file
-a '.env.example' file
-a persistent data directory
-a backup directory
-service-specific configuration files
+- a `.env` file
+- a `.env.example` file
+- a persistent data directory
+- a backup directory
+- service-specific configuration files
 
 Currently available services:
 
@@ -462,11 +626,14 @@ Currently available services:
 * MongoDB
 * RabbitMQ
 * MinIO
+* Grafana
+* Prometheus
+* Node Exporter
 
 Planned services:
 
-* Grafana
 * Elasticsearch
+* Nginx Proxy Manager
 
 ---
 
@@ -551,10 +718,10 @@ BDD/
 │   └── data-pgadmin/
 │
 └── Redis/
-     ├── .env.example
-     ├── docker-compose.yml
-     ├── backups/
-     └── data-redis/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── backups/
+    └── data-redis/
      
 Messaging/
 └── RabbitMQ/
@@ -563,12 +730,29 @@ Messaging/
     ├── backups/
     └── data-rabbitmq/
 
-Storage
-└── MinIO
-     ├── .env.example
-     ├── docker-compose.yml
-     ├── backups/
-     └── data-minio/
+Storage/
+└── MinIO/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── backups/
+    └── data-minio/
+
+Monitoring/
+├── Grafana/
+│   ├── .env.example
+│   ├── docker-compose.yml
+│   ├── backups/
+│   └── data-grafana/
+│
+├── Prometheus/
+│   ├── docker-compose.yml
+│   ├── prometheus.yml
+│   ├── backups/
+│   └── data-prometheus/
+│
+└── NodeExporter/
+    ├── docker-compose.yml
+    └── backups/
 ```
 
 ---
@@ -773,6 +957,147 @@ http://localhost:9001
 
 ---
 
+### Grafana
+
+Container:
+
+* grafana-server
+
+Ports:
+
+| Service | Port |
+|----------|----------|
+| Grafana | 3000 |
+
+Access:
+
+```text
+http://localhost:3000
+```
+
+---
+
+### Prometheus
+
+Container:
+
+* prometheus-server
+
+Ports:
+
+| Service | Port |
+|----------|----------|
+| Prometheus | 9090 |
+
+Access:
+
+```text
+http://localhost:9090
+```
+
+---
+
+### Node Exporter
+
+Container:
+
+* node-exporter
+
+Ports:
+
+| Service | Port |
+|----------|----------|
+| Node Exporter | 9100 |
+
+Access:
+
+```text
+http://localhost:9100/metrics
+```
+Prometheus endpoint exposing system metrics.
+
+---
+
+## Monitoring Configuration
+
+After starting the monitoring services, a few additional steps are required to complete the setup.
+
+### Add Prometheus as a Grafana Data Source
+
+1. Open Grafana:
+
+```text
+http://localhost:3000
+```
+
+2. Sign in using the credentials defined in the `.env` file.
+
+3. Navigate to:
+
+```text
+Connections
+→ Data Sources
+→ Add data source
+```
+
+4. Select:
+
+```text
+Prometheus
+```
+
+5. Use the following URL:
+
+```text
+http://host.docker.internal:9090
+```
+
+Note:
+
+- `http://localhost:9090` from your web browser
+- `http://host.docker.internal:9090` from a Docker container.
+
+6. Click:
+
+```text
+Save & Test
+```
+
+### Import a System Dashboard
+
+1. In Grafana:
+
+```text
+Dashboards
+```
+
+→ Import
+
+2. Import the following dashboard:
+
+```text
+1860
+```
+
+3. Select the Prometheus data source.
+
+4. Click:
+
+```text
+Import
+```
+
+This dashboard provides visibility into:
+
+CPU usage;
+memory usage;
+disk usage;
+network traffic;
+system load;
+system uptime.
+
+---
+
 ## Secrets Management
 
 The following files are never versioned:
@@ -793,7 +1118,7 @@ The following files are versioned:
 
 ## Persistent Data
 
-Docker data directories are never pushed to GitHub.
+Docker data directories are excluded from version control and never pushed to GitHub.
 
 Examples:
 
@@ -803,6 +1128,10 @@ data-postgres/
 data-pgadmin/
 data-redis/
 data-mongodb/
+data-rabbitmq/
+data-minio/
+data-grafana/
+data-prometheus/
 ```
 
 These directories are excluded through the `.gitignore` file.
@@ -811,13 +1140,7 @@ These directories are excluded through the `.gitignore` file.
 
 ## Backups
 
-Each service includes a dedicated:
-
-```text
-backups/
-```
-
-directory intended to store future backup exports.
+Each service includes a dedicated `backups/` directory intended to store backup exports.
 
 ---
 
@@ -827,21 +1150,22 @@ Each service follows the structure below:
 
 ```text
 ServiceName/
-├── .env
-├── .env.example
 ├── docker-compose.yml
 ├── backups/
-└── data-service/
+├── data-service/
+├── .env (when required)
+├── .env.example (when required)
+└── service-specific configuration files (when required)
 ```
 
 Principles:
 
-* 1 technology = 1 directory
-* 1 `.env` file
-* 1 `.env.example` file
+* 1 service per dedicated folder
 * 1 `docker-compose.yml` file
-* 1 dedicated data directory
-* 1 dedicated backup directory
+* 1 dedicated data directory when required
+* 1 dedicated backup directory when required
+* 1 `.env` file when environment variables are needed
+* 1 `.env.example` file when environment variables are needed
 
 ---
 
