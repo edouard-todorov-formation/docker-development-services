@@ -1,0 +1,23 @@
+name: messaging-rabbitmq
+
+services:
+    rabbitmq:
+        image: rabbitmq:4-management
+
+        container_name: rabbitmq-server
+
+        restart: unless-stopped
+
+        environment:
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+            # Nom de noeud fixe requis pour conserver les données après un docker compose down/up
+            # Fixed node name for persistent RabbitMQ data
+            RABBITMQ_NODENAME: ${RABBITMQ_NODENAME}
+
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
+        volumes:
+            - ./data-rabbitmq:/var/lib/rabbitmq

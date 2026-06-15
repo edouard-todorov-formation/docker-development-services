@@ -1,11 +1,14 @@
 # Variables d'environnement
+# Environment variables
 .env
 
-# Données Docker
+# Données persistantes Docker
+# Docker persistent data
 data-*/
 **/data-*/
 
-# Backups
+# Sauvegardes des bases de données et service
+# Database and service backups
 *.sql
 *.dump
 *.bak
@@ -20,5 +23,5 @@ Desktop.ini
 # VS Code
 .vscode/
 
-# JetBrains
+# JetBrains IDEs
 .idea/

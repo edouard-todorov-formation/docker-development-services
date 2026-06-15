@@ -35,10 +35,10 @@ Services actuellement disponibles :
 * PostgreSQL
 * Redis
 * MongoDB
+* RabbitMQ
 
 Services prévus :
 
-* RabbitMQ
 * MinIO
 * Grafana
 * Elasticsearch
@@ -126,10 +126,17 @@ BDD/
 │   └── data-pgadmin/
 │
 └── Redis/
+     ├── .env.example
+     ├── docker-compose.yml
+     ├── backups/
+     └── data-redis/
+
+Messaging/
+└── RabbitMQ/
     ├── .env.example
     ├── docker-compose.yml
     ├── backups/
-    └── data-redis/
+    └── data-rabbitmq/
 ```
 
 ---
@@ -292,6 +299,27 @@ http://localhost:8082
 
 ---
 
+### RabbitMQ
+
+Conteneur :
+
+* rabbitmq-server
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| RabbitMQ AMQP | 5672 |
+| RabbitMQ Management | 15672 |
+
+Accès :
+
+```text
+http://localhost:15672
+```
+
+---
+
 ## Gestion des secrets
 
 Les fichiers suivants ne sont jamais versionnés :
@@ -368,7 +396,7 @@ Principes :
 
 Edouard Todorov
 
-Développeur Full Stack en formation
+Développeur Full Stack
 
 🌐 Portfolio : https://portfolio.tekedo.fr
 
@@ -404,10 +432,10 @@ Currently available services:
 * PostgreSQL
 * Redis
 * MongoDB
+* RabbitMQ
 
 Planned services:
 
-* RabbitMQ
 * MinIO
 * Grafana
 * Elasticsearch
@@ -495,10 +523,17 @@ BDD/
 │   └── data-pgadmin/
 │
 └── Redis/
+     ├── .env.example
+     ├── docker-compose.yml
+     ├── backups/
+     └── data-redis/
+     
+Messaging/
+└── RabbitMQ/
     ├── .env.example
     ├── docker-compose.yml
     ├── backups/
-    └── data-redis/
+    └── data-rabbitmq/
 ```
 
 ---
@@ -661,6 +696,27 @@ http://localhost:8082
 
 ---
 
+### RabbitMQ
+
+Container:
+
+* rabbitmq-server
+
+Ports:
+
+| Service | Port |
+|----------|----------|
+| RabbitMQ AMQP | 5672 |
+| RabbitMQ Management | 15672 |
+
+Access:
+
+```text
+http://localhost:15672
+```
+
+---
+
 ## Secrets Management
 
 The following files are never versioned:
@@ -737,7 +793,7 @@ Principles:
 
 Edouard Todorov
 
-Aspiring Full Stack Developer
+Full Stack Developer
 
 🌐 Portfolio: https://portfolio.tekedo.fr
 
