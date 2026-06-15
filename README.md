@@ -8,8 +8,8 @@ Docker-based development infrastructure for learning, experimentation, and Full 
 
 ## Languages
 
-- [🇫🇷 Français](# Version-Française)
-- [🇬🇧 English](# English-Version)
+- [🇫🇷 Français](#version-Française)
+- [🇬🇧 English](#English-Version)
 
 ---
 
