@@ -29,7 +29,21 @@ Chaque service est isolé dans son propre dossier, dispose d'un fichier `docker-
 - un dossier de sauvegardes
 - des fichiers de configuration spécifiques selon le service
 
-Services actuellement disponibles :
+## Philosophie du dépôt
+
+Ces services ont pour objectif d'accélérer le développement des projets.
+
+Ils constituent une infrastructure mutualisée utilisée pendant les phases d'apprentissage, d'expérimentation et de développement.
+
+Lorsqu'un projet atteint un niveau de maturité suffisant, il peut :
+
+• continuer à utiliser ces services ;
+• embarquer progressivement sa propre stack ;
+• devenir totalement autonome.
+
+Les services présents dans ce dépôt ne sont pas destinés à être obligatoirement utilisés en production.
+
+## Services actuellement disponibles :
 
 * MySQL
 * PostgreSQL
@@ -40,10 +54,11 @@ Services actuellement disponibles :
 * Grafana
 * Prometheus
 * Node Exporter
+* Elasticsearch
+* Kibana
 
 Services prévus :
 
-* Elasticsearch
 * Nginx Proxy Manager
 
 ---
@@ -164,6 +179,21 @@ Monitoring/
 └── NodeExporter/
     ├── docker-compose.yml
     └── backups/
+
+Search/
+└── Elasticsearch/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── data-elasticsearch/
+    ├── data-kibana/
+    ├── backups/
+    ├── config/
+    │   └── templates/
+    │       └── dev-default-template.json
+    ├── scripts/
+    │   └── apply-dev-template.ps1
+    ├── docs/
+    └── README.md
 ```
 
 ---
@@ -429,9 +459,61 @@ Endpoint Prometheus exposant les métriques système.
 
 ---
 
+### Elasticsearch
+
+Conteneurs :
+
+* elasticsearch
+* kibana
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| Elasticsearch | 9200 |
+| Kibana | 5601 |
+
+Accès :
+
+```text
+http://localhost:9200
+http://localhost:5601
+```
+
+Particularités :
+
+• Persistance validée
+• Kibana inclus
+• Cluster mono-nœud
+• xpack.security.enabled=false
+• Template Elasticsearch dev-default
+• number_of_replicas=0 par défaut
+
+---
+
 ## Configuration du monitoring
 
 Après le démarrage des services Monitoring, quelques actions sont nécessaires pour finaliser la configuration.
+
+## Configuration Elasticsearch
+
+Après le premier démarrage d'Elasticsearch, appliquer le template de développement :
+
+PowerShell :
+
+.\scripts\apply-dev-template.ps1
+
+Objectif :
+
+Configurer automatiquement :
+
+{
+    "number_of_replicas": 0
+}
+
+pour tous les nouveaux index créés dans l'environnement de développement.
+
+Cette configuration évite les index en état jaune sur un cluster mono-nœud.
 
 ### Ajouter Prometheus comme source de données Grafana
 
@@ -541,6 +623,8 @@ data-rabbitmq/
 data-minio/
 data-grafana/
 data-prometheus/
+data-elasticsearch/
+data-kibana/
 ```
 
 Ces dossiers sont exclus via le fichier `.gitignore`.
@@ -567,9 +651,12 @@ Chaque service suit la structure suivante :
 NomDuService/
 ├── docker-compose.yml
 ├── backups/
-├── data-service/
+├── data-service/ (données persistantes)(si nécessaire)
 ├── .env (optionnel)
 ├── .env.example (optionnel)
+├── config/ (optionnel)
+├── scripts/ (optionnel)
+├── docs/ (optionnel)
 └── fichiers de configuration spécifiques (optionnels)
 ```
 
@@ -618,7 +705,21 @@ Each service is isolated in its own directory, includes a `docker-compose.yml` f
 - a backup directory
 - service-specific configuration files
 
-Currently available services:
+## Repository Philosophy
+
+These services are designed to accelerate project development.
+
+They provide a shared infrastructure used during learning, experimentation, and development phases.
+
+As a project reaches a sufficient level of maturity, it can:
+
+continue using these services;
+progressively adopt its own stack;
+become fully autonomous.
+
+The services provided in this repository are not intended to be mandatory for production use.
+
+## Currently available services:
 
 * MySQL
 * PostgreSQL
@@ -629,10 +730,11 @@ Currently available services:
 * Grafana
 * Prometheus
 * Node Exporter
+* Elasticsearch
+* Kibana
 
 Planned services:
 
-* Elasticsearch
 * Nginx Proxy Manager
 
 ---
@@ -753,6 +855,21 @@ Monitoring/
 └── NodeExporter/
     ├── docker-compose.yml
     └── backups/
+
+Search/
+└── Elasticsearch/
+    ├── .env.example
+    ├── docker-compose.yml
+    ├── data-elasticsearch/
+    ├── data-kibana/
+    ├── backups/
+    ├── config/
+    │   └── templates/
+    │       └── dev-default-template.json
+    ├── scripts/
+    │   └── apply-dev-template.ps1
+    ├── docs/
+    └── README.md
 ```
 
 ---
@@ -1018,9 +1135,61 @@ Prometheus endpoint exposing system metrics.
 
 ---
 
+### Elasticsearch
+
+Container :
+
+* elasticsearch
+* kibana
+
+Ports :
+
+| Service | Port |
+|----------|----------|
+| Elasticsearch | 9200 |
+| Kibana | 5601 |
+
+Access :
+
+```text
+http://localhost:9200
+http://localhost:5601
+```
+
+Key Characteristics :
+
+• Persistence enabled and validated
+• Kibana included
+• Single-node cluster
+• xpack.security.enabled=false
+• Template Elasticsearch dev-default
+• number_of_replicas=0 by default
+
+---
+
 ## Monitoring Configuration
 
 After starting the monitoring services, a few additional steps are required to complete the setup.
+
+## Elasticsearch Configuration
+
+After the first Elasticsearch startup, apply the development template:
+
+PowerShell:
+
+.\scripts\apply-dev-template.ps1
+
+Purpose:
+
+Automatically configure:
+
+{
+    "number_of_replicas": 0
+}
+
+for all new indexes created in the development environment.
+
+This setting prevents indexes from entering a yellow state when running on a single-node cluster.
 
 ### Add Prometheus as a Grafana Data Source
 
@@ -1132,6 +1301,8 @@ data-rabbitmq/
 data-minio/
 data-grafana/
 data-prometheus/
+data-elasticsearch/
+data-kibana/
 ```
 
 These directories are excluded through the `.gitignore` file.
@@ -1152,9 +1323,12 @@ Each service follows the structure below:
 ServiceName/
 ├── docker-compose.yml
 ├── backups/
-├── data-service/
+├── data-service/ (when required)
 ├── .env (when required)
 ├── .env.example (when required)
+├── config/ (when required)
+├── scripts/ (when required)
+├── docs/ (when required)
 └── service-specific configuration files (when required)
 ```
 
